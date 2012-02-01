@@ -4,10 +4,12 @@ class Array
   # to insert or update stuff in the database.
   def to_postgres_array(omit_quotes = false)
     result = "#{omit_quotes ? '' : "'" }{"
-    
+
     result << collect do |value|
       if value.is_a?(Array)
         value.to_postgres_array(true)
+      elsif value.is_a?(Fixnum)
+        value
       else
         value = value.gsub(/\\/, '\&\&')
         value = value.gsub(/'/, "''")
@@ -16,7 +18,7 @@ class Array
         value
       end
     end.join(", ")
-    
+
     result << "}#{omit_quotes ? '' : "'" }"
   end
 

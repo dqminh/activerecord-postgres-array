@@ -48,4 +48,13 @@ describe "activerecord-postgres-array" do
       its(:sql_type) { should == "integer[]" }
     end
   end
+
+  describe Array do
+    describe "#to_postgres_array" do
+      context 'when array contains fixnums' do
+        subject { [10,10].to_postgres_array }
+        it { should == "'{10, 10}'" }
+      end
+    end
+  end
 end
