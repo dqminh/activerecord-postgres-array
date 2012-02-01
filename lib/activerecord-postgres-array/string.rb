@@ -18,18 +18,23 @@ class String
     if empty?
       return []
     else
-      elements = match(/^\{(.+)\}$/).captures.first.split(",")
+      matches = match(/^\{(.+)\}$/)
+      return [] unless matches
+      elements = matches.captures.first.split(",")
       elements = elements.map do |e|
         e = e.gsub(/\\"/, '"')
         e = e.gsub(/^\"/, '')
         e = e.gsub(/\"$/, '')
         e = e.strip
       end
-      
-      if base_type == :decimal
-        return elements.collect(&:to_d)
-      else
-        return elements
+
+      case base_type
+        when :decimal
+          elements.collect(&:to_d)
+        when :integer
+          elements.collect(&:to_i)
+        else
+          elements
       end
     end
   end
