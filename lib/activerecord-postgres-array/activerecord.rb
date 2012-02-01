@@ -64,6 +64,18 @@ module ActiveRecord
         end
       end
       alias_method_chain :simplified_type, :array
+
+      class << self
+        def extract_value_from_default_with_array(default)
+          case default
+            when /\A'(.*)'::(?:(.*)\[\])\z/m
+              $1.from_postgres_array $2.to_sym
+            else
+              extract_value_from_default_without_array default
+          end
+        end
+        alias_method_chain :extract_value_from_default, :array
+      end
     end
   end
 end
