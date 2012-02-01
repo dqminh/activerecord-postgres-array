@@ -24,6 +24,10 @@ require 'arel'
 
 RSpec.configure do |config|
   config.before do
-    require_relative 'fixtures/schema'
+    ActiveRecord::Schema.define do
+      create_table "tests", :force => true do |t|
+        t.string :value
+      end
+    end
   end
 end

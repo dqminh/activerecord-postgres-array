@@ -58,7 +58,7 @@ module ActiveRecord
         if field_type =~ /^numeric.+\[\]$/
           :decimal_array
         elsif field_type =~ /\[\]$/
-          field_type.gsub(/\[\]/, '_array')
+          field_type.gsub(/\[\]/, '_array').to_sym
         else
           simplified_type_without_array(field_type)
         end

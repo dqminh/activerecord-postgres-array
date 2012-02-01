@@ -88,5 +88,6 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-postgres-array!
+  pg
   rails (~> 3.0.9)
   rspec
