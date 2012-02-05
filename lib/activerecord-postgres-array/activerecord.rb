@@ -7,7 +7,12 @@ module ActiveRecord
       POSTGRES_ARRAY_TYPES = %w( string text integer float decimal datetime timestamp time date binary boolean )
 
       def native_database_types_with_array
-        native_database_types_without_array.merge(POSTGRES_ARRAY_TYPES.inject(Hash.new) {|h, t| h.update("#{t}_array".to_sym => {:name => "#{t} ARRAY"})})
+        native_types = native_database_types_without_array
+        array_types = POSTGRES_ARRAY_TYPES.inject(Hash.new) do |h, t|
+          singular_type = native_types[t.to_sym]
+          h.update "#{t}_array".to_sym => { :name => "#{singular_type[:name]} ARRAY" } if singular_type[:name]
+        end
+        native_types.merge array_types
       end
       alias_method_chain :native_database_types, :array
 
@@ -58,7 +63,9 @@ module ActiveRecord
         if field_type =~ /^numeric.+\[\]$/
           :decimal_array
         elsif field_type =~ /\[\]$/
-          field_type.gsub(/\[\]/, '_array').to_sym
+          type = field_type.gsub /\[\]/, ""
+          data_type = simplified_type_without_array(type)
+          "#{data_type}_array".to_sym
         else
           simplified_type_without_array(field_type)
         end
