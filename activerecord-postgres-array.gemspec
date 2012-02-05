@@ -14,8 +14,7 @@ Gem::Specification.new do |s|
      lib/activerecord-postgres-array/string.rb
   )
   s.add_dependency 'pg'
-  s.add_development_dependency 'rspec'
-  s.add_development_dependency 'pg'
+  s.add_development_dependency 'rspec', '~> 2.8'
   s.add_development_dependency 'rails', '~> 3.0.9'
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
